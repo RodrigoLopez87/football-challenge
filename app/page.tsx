@@ -9,7 +9,6 @@ export default function Home() {
   
   return (
     <div>
-      <p>hola 2</p>
       <ul>
         {leagues.map((league) => (
           <li key={league.slug}>
