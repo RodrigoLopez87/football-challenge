@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 
+const url = process.env.API_URL;
+
 export async function GET() {
   
-    const response = await fetch('https://fakestoreapi.com/products');
+    const response = await fetch(`${url}/products`);
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -14,8 +16,18 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const product: Product = await request.json();
-    // Aquí puedes agregar lógica para manejar el producto recibido, como guardarlo en una base de datos
-    return NextResponse.json({ message: 'Product received', product });
+    
+    const result = await fetch(`${url}/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product)
+    });
+    const newProduct = await result.json();
+    
+    return NextResponse.json({ message: 'Product received', newProduct });
+    
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
